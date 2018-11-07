@@ -48,10 +48,9 @@ def find_last_tweets():
 def find_user_stats():
         #return pd.read_sql(query, db_init.db.get_connection())
         df = pd.read_sql(query_user, db_init.db.get_connection())
-        df['id'].astype('int64')
 
         df['local'] = df['id'].map(dict_paises)
-        print(df['local'].tolist())
+        
         df['Engag_Tweet'] = (df['Retweets'] + df['Replies']*2)/df['Tweets']
         df['Engag_User'] = (df['Retweets'] + df['Replies'])/df['total_followers']
         
