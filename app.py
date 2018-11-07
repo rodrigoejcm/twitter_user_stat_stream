@@ -97,8 +97,8 @@ def get_total_tweets_hour():
 
 
 if __name__ == '__main__':
-    #app.run(port=443, host='0.0.0.0')
-    app.run()
+    app.run(port=443, host='0.0.0.0')
+    #app.run()
 
 
 
