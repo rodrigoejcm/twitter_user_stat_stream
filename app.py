@@ -48,8 +48,14 @@ def find_last_tweets():
 def find_user_stats():
         #return pd.read_sql(query, db_init.db.get_connection())
         df = pd.read_sql(query_user, db_init.db.get_connection())
+        df['id'].astype('int64')
+
         df['local'] = df['id'].map(dict_paises)
-        return df[['name_usuario','Tweets','Retweets', 'Replies','total_followers','total_following','total_posts','local']]
+        print(df['local'].tolist())
+        df['Engag_Tweet'] = (df['Retweets'] + df['Replies']*2)/df['Tweets']
+        df['Engag_User'] = (df['Retweets'] + df['Replies'])/df['total_followers']
+        
+        return df[['name_usuario','Tweets','Retweets', 'Replies','total_followers','total_following','total_posts','local', 'Engag_Tweet','Engag_User']]
 
 
 def find_total_time():
@@ -91,8 +97,8 @@ def get_total_tweets_hour():
 
 
 if __name__ == '__main__':
-    app.run(port=443, host='0.0.0.0')
-    #app.run()
+    #app.run(port=443, host='0.0.0.0')
+    app.run()
 
 
 

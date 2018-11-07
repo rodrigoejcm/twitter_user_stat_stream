@@ -55,10 +55,22 @@ on  a.screen_name_usuario = b.retweet_from_screen_name
 join 
 (select in_reply_to_screen_name  , count(*) as "Replies" from tweet where tweet_type = "REPLY" group by in_reply_to_screen_name ) as c  on c.in_reply_to_screen_name = a.screen_name_usuario 
 join
-(SELECT name_usuario, total_followers, total_following, total_posts location from user) as d
+(SELECT name_usuario, total_followers, total_following, total_posts, location from user) as d
 on a.name_usuario = d.name_usuario 
+order by 7,3,5 desc;
 
-        order by 7,3,5 desc;
+
+SELECT * FROM 
+( SELECT screen_name_usuario , name_usuario, count(*) as "Tweets"from tweet where  tweet_type = "ORIGINAL" group by screen_name_usuario, name_usuario ) AS a 
+join 
+( select retweet_from_screen_name , count(*) as "Retweets" from tweet where tweet_type = "RETWEET" group by retweet_from_screen_name ) AS b 
+on  a.screen_name_usuario = b.retweet_from_screen_name 
+join 
+(select in_reply_to_screen_name  , count(*) as "Replies" from tweet where tweet_type = "REPLY" group by in_reply_to_screen_name ) as c  on c.in_reply_to_screen_name = a.screen_name_usuario 
+join
+(SELECT id, name_usuario, total_followers, total_following, total_posts, location from user) as d
+on a.name_usuario = d.name_usuario 
+order by 7,3,5 desc;
 
 
 
