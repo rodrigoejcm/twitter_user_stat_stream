@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Twitter Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Twitter</h1>
+        
+        <br>
+        <h2>Total Tweets: {{ total }}</h2>
+        <h2>Runtime: {{ runtime }}</h2>
+        <br>
+        <h2>Last Tweets:</h2>
+        <table class="table" id"=table">
+            <thead class"thead-dark">
+                
+                <tr>
+                    <th class="tg-0lax">ID_TWEET</th>
+                    <th class="tg-0lax">DATE</th>
+                    <th class="tg-0lax">TEXT</th>
+                </tr>
+                
+            </thead>
+            <tbody id="tbodyt">
+                {% for t in last_tweet %}
+                    <tr>
+                        <td class="tg-0lax"><a href="http://www.twitter.com/anyuser/status/{{ t.id }}">{{ t.id }}</a></td>
+                        <td class="tg-0lax">{{ t.created_at }}</td>
+                        <td class="tg-0lax">{{ t.text }}</td>
+                    </tr>      
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <h2>Most replied Tweets:</h2>
+                <table class="table" id"=table">
+                    <thead class"thead-dark">
+                        
+                        <tr>
+                            <th class="tg-0lax">ID_TWEET</th>
+                            <th class="tg-0lax">REPLIES</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="tbodyt">
+                        {% for t in reply_tweets %}
+                            <tr>
+                                <td class="tg-0lax"><a href="http://www.twitter.com/anyuser/status/{{ t[0] }}">{{ t[0] }}</a></td>
+                                <td class="tg-0lax">{{ t[1] }}</td>
+                            </tr>      
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <h2>Most Retweeted Tweets:</h2>
+                <table class="table" id"=table">
+                    <thead class"thead-dark">
+                        
+                        <tr>
+                            <th class="tg-0lax">ID_TWEET</th>
+                            <th class="tg-0lax">RETWEETS</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="tbodyt">
+                        {% for t in retweet_tweets %}
+                            <tr>
+                                <td class="tg-0lax"><a href="http://www.twitter.com/anyuser/status/{{ t[0] }}">{{ t[0] }}</a></td>
+                                <td class="tg-0lax">{{ t[1] }}</td>
+                            </tr>      
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <h2>Tweets per hour</h2>
+            <div class="col-12">
+                <img class="mx-auto d-block" src= {{graph}} ></img>
+            </div>
+        </div>
+        
+        </br>
+        <h2>Sys Info:</h2>
+        <ul>
+            <li>Total Space: {{space}} GB</li>
+            <li>Used Space: {{used}} GB</li>
+            <li>Free Space: {{free}} GB</li>
+        </ul>
+        
+        
+    </div>
+</body>
+</html>

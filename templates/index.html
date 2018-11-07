@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Twitter Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css">
+    
+    
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Twitter</h1>
+        
+        <br>
+        <h4>Total Tweets: {{ total }} | Runtime: {{ runtime.duracao[0] }}</h4>
+        
+        <br>
+        
+        {% for t in last_tweet %}
+            <h4>Last Tweets: </h4>
+            <p>
+                <a href="http://www.twitter.com/anyuser/status/{{ t.id }}">{{ t.id }}</a> | 
+                {{ t.created_at }}
+            </p>
+        {% endfor %}
+        
+        <br>
+        <h2>Brasil:</h2>
+        {{ user_stats[user_stats['local'] == "Brasil"].to_html(classes="tb display compact stripe", table_id="brasil") | safe}}
+        <br>
+        <h2>Portugal:</h2>
+        {{ user_stats[user_stats['local'] == "Portugal"].to_html(classes="tb display compact stripe",table_id="pt") | safe}}
+        <br>
+        <h2>Reino Unido:</h2>
+        {{ user_stats[user_stats['local'] == "Reino Unido "].to_html(classes="tb display compact stripe",table_id="uk") | safe}}
+        <br>
+        <h2>EUA:</h2>
+        {{ user_stats[user_stats['local'] == "EUA"].to_html(classes="tb display compact stripe",table_id="usa") | safe}}
+        <br>
+        <h2>GLOBAL:</h2>
+        {{ user_stats[user_stats['local'] == "GLOBAL"].to_html(classes="tb display compact stripe",table_id="gl") | safe}}
+        <br>
+
+
+        <div class="row">
+            <h2>Tweets per hour</h2>
+            <div class="col-12">
+                <img class="mx-auto d-block" src= {{graph}} ></img>
+            </div>
+        </div>
+        
+        </br>
+        <h2>Sys Info:</h2>
+        <ul>
+            <li>Total Space: {{space}} GB</li>
+            <li>Used Space: {{used}} GB</li>
+            <li>Free Space: {{free}} GB</li>
+        </ul>
+        
+        
+    </div>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('.tb').DataTable(
+                {"paging":   false,
+                "info":     false,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": [ 0 ],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [ 8 ],
+                        "visible": false
+                    }
+                ]}
+            );
+            
+        } );
+    </script>
+
+</body>
+</html>
