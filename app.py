@@ -53,10 +53,11 @@ def find_user_stats():
         
         df.fillna(0, inplace=True)
 
-        df['Engag_Tweet'] = (df['Retweets'] + df['Replies']*2)/df['Tweets']
+        df['Engag_Rep_m'] = df['Replies']/df['Tweets']
+        df['Engag_Tweet'] = (df['Retweets'] + df['Replies'])/df['Tweets']
         df['Engag_User'] = (df['Retweets'] + df['Replies'])/df['total_followers']
         
-        return df[['name_usuario','Tweets','Retweets', 'Replies','total_followers','total_following','total_posts','local', 'Engag_Tweet','Engag_User']]
+        return df
 
 
 def find_total_time():
