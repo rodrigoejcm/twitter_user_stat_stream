@@ -69,7 +69,7 @@ def find_total_time():
 def log_size():
         query = 'INSERT INTO size_status (table_name, size_mb, date) \
                  SELECT table_name, ROUND(((data_length + index_length) / 1024 / 1024), 2) AS "size_mb", NOW() AS date  FROM information_schema.TABLES WHERE table_schema = "user_comp_2" ORDER BY (data_length + index_length) DESC;'        
-        pd.read_sql(query, db_init.db.get_connection())
+        db_init.db.execute(query)
 #def find_most_reply_tweets():
 #    return select((t.in_reply_to_status_id, count()) for t in db_init.Tweet if t.in_reply_to_status_id != None).order_by(desc(2))[:5]
 
