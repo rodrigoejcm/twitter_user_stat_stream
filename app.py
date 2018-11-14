@@ -18,6 +18,7 @@ def index():
     total_space, used_space, free_space = shutil.disk_usage(__file__)
     total_tweets = count_tweets()
     last_tweet = find_last_tweets()
+    log_size()
     #retweet_tweets = find_most_retweet_tweets()
     #reply_tweets = find_most_reply_tweets()
     user_stats = find_user_stats()
@@ -64,6 +65,11 @@ def find_total_time():
         query = 'SELECT TIMEDIFF( (NOW()), (SELECT created_at FROM tweet ORDER BY created_at LIMIT 1)) as "duracao";'        
         return pd.read_sql(query, db_init.db.get_connection())
 
+
+def log_size():
+        query = 'INSERT INTO size_status (table_name, size_mb, date) \
+                 SELECT table_name, ROUND(((data_length + index_length) / 1024 / 1024), 2) AS "size_mb", NOW() AS date  FROM information_schema.TABLES WHERE table_schema = "user_comp_2" ORDER BY (data_length + index_length) DESC;'        
+        pd.read_sql(query, db_init.db.get_connection())
 #def find_most_reply_tweets():
 #    return select((t.in_reply_to_status_id, count()) for t in db_init.Tweet if t.in_reply_to_status_id != None).order_by(desc(2))[:5]
 
