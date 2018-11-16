@@ -54,7 +54,7 @@ sql_debug(True)  # Output all SQL queries to stdout
 
 params = dict(
     #sqlite=dict(provider='sqlite', filename='university1.sqlite', create_db=True),
-    mysql=dict(provider='mysql', host="localhost", user="twitter_user", passwd="twitter_pass", db="user_comp_2")
+    mysql=dict(provider='mysql', host="localhost", user="twitter_user", passwd="twitter_pass", db="user_comp_3")
     #postgres=dict(provider='postgres', user='pony', password='twitter_user', host='localhost', database='twitter'),
     #oracle=dict(provider='oracle', user='c##pony', password='pony', dsn='localhost/orcl')
 )
