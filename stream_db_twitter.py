@@ -9,6 +9,8 @@ from birdy.twitter import StreamClient
 import pass_tw ## twitter credentials
 import unicodedata
 from unidecode import unidecode
+from data_vars import follow
+import re
 
 
 
@@ -16,70 +18,6 @@ client = StreamClient(pass_tw.CONSUMER_KEY,
                     pass_tw.CONSUMER_SECRET,
                     pass_tw.ACCESS_TOKEN,
                     pass_tw.ACCESS_TOKEN_SECRET)
-
-
-follow = [
-'790680',
-'2174537102',
-'54341363',
-'65473559',
-'17715048',
-'14594698',
-'8802752',
-'14594813',
-'9317502',
-'14311308',
-'8110402',
-'31161322',
-'16632084',
-'34655603',
-'21866939',
-'29913589',
-'21207962',
-'142393421',
-'23941036',
-'124139163',
-'2561091',
-'8665852',
-'16451028',
-'25535042',
-'15391813',
-'15391813',
-'1690412382',
-'15392221',
-'17163446',
-'14842285',
-'21783395',
-'612473',
-'87818409',
-'16973333',
-'111556423',
-'271413771',
-'16343974',
-'7587032',
-'16887175',
-'6107422',
-'138749160',
-'17895820',
-'759251',
-'428333',
-'807095',
-'14293310',
-'2467791',
-'7309052',
-'1020058453',
-'1367531',
-'14511951',
-'14173315',
-'28785486',
-'15754281',
-'15012486',
-'95431448',
-'3108351',
-'3108351',
-'1652541',
-'51241574'
-] 
 
 resource = client.stream.statuses.filter.post(follow=follow)
 
@@ -94,6 +32,7 @@ def save_data(json_data):
         id = json_data['id']
 
         if not db_init.Tweet.exists(id=id): 
+            total_words = 0
             id_str = json_data['id_str']
             in_reply_to_user_id = json_data['in_reply_to_user_id'] if 'in_reply_to_user_id' in json_data else None 
             created_at = parser.parse(json_data['created_at'])
@@ -113,7 +52,7 @@ def save_data(json_data):
             if truncated : 
                 text_full =  json_data['extended_tweet']['full_text'] 
             else:
-                text_full =  None
+                text_full =  text
             #contributors = json_data['contributors'] if 'contributors' in json_data else None 
             #retweet_count = json_data['retweet_count'] if 'retweet_count' in json_data else None 
             in_reply_to_status_id = json_data['in_reply_to_status_id'] if 'in_reply_to_status_id' in json_data else None 
@@ -166,6 +105,8 @@ def save_data(json_data):
                     tweet_type = "ORIGINAL - REPLY"
             elif(in_reply_to_status_id or in_reply_to_screen_name or in_reply_to_user_id ):
                 tweet_type = "REPLY"
+                line = " I am having a very nice day."
+                total_words = len(re.findall(r'\w+', text_full))
                 print(in_reply_to_status_id," reply ID")
             elif(retweet_from_tweet_id):
                 tweet_type ="RETWEET"
@@ -224,6 +165,7 @@ def save_data(json_data):
                     
                     text_full = text_full,
                     text = text,
+                    total_words = total_words,
                     
                     source = source,
                     
