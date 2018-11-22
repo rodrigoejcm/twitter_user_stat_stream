@@ -107,7 +107,7 @@ def save_data(json_data):
                 tweet_type = "REPLY"
                 line = ' '.join(re.sub("([@#][A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)"," ",text_full).split())
                 total_words = len(re.findall(r'\w+', line))
-                print(in_reply_to_status_id," reply ID")
+                #print(in_reply_to_status_id," reply ID")
             elif(retweet_from_tweet_id):
                 tweet_type ="RETWEET"
             else:

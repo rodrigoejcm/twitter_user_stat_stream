@@ -57,7 +57,21 @@
                 <img class="mx-auto d-block" src= {{graph}} ></img>
             </div>
         </div>
-        
+
+        <br>
+        <h2>Word count Replies:</h2>
+        <div>
+            {{ resultado.to_html(classes="display compact stripe words") | safe}}
+        </div>
+
+        <h2>Tweets filterde with Word List:</h2>
+        <div>
+            {{ tweets_word_list.to_html(classes="display compact stripe tweets_words", escape=False) | safe}}
+        </div>
+
+    
+
+
         </br>
         <h2>Sys Info:</h2>
         <ul>
@@ -87,6 +101,31 @@
                     {
                         "targets": [ 10 ],
                         "visible": false
+                    }
+                ]}
+            );
+            $('.words').DataTable(
+                {"paging":   false,
+                "info":     false,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": [ 0 ],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ]}
+            );
+
+            $('.tweets_words').DataTable(
+                {"paging":   true,
+                "info":     true,
+                "searching": true,
+                "columnDefs": [
+                    {
+                        "targets": [ 0 ],
+                        "visible": false,
+                        "searchable": false
                     }
                 ]}
             );

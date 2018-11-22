@@ -139,3 +139,69 @@ left join \
 (SELECT id, name_usuario, total_followers, total_following, total_posts, location from user) as d \
 on a.name_usuario = d.name_usuario ; '
 
+query_words = ""
+
+word_list_filter = [
+"bicha",
+"bichona",
+"boiola",
+"fufa",
+"mestico",
+"nega",
+"nego",
+"negritude",
+"paneleira",
+"paneleiro",
+"pau no cu",
+"preta",
+"preto",
+"rabeta",
+"sangue ruim",
+"sapatão",
+"sapatões",
+"tição",
+"tições",
+"Viado",
+"feia gorda",
+"refugiado",
+"muçulmano",
+"mulher",
+"lésbica",
+"velho",
+"velha",
+"gordo",
+"gorda",
+"obeso",
+"obesa",
+"judeu",
+"cigano",
+"cigana",
+"indiano",
+"nigger",
+"blaxican",
+"cunt",
+"curry",
+"dyke",
+"gay",
+"bitch",
+"gew",
+"gypsy",
+"old people ",
+"black",
+"mexican"
+"african american",
+"gypsy",
+"jew",
+"woman",
+"lesbian",
+"refugee",
+"muslim",
+"chinese",
+"japanese",
+"fat",
+"indian"]
+
+word_list_filter_regex = '|'.join(word_list_filter)
+
+
+query_tweets_with_words = "SELECT id, text_full FROM tweet WHERE tweet_type = 'REPLY' AND text_full REGEXP '" + word_list_filter_regex + "' ORDER BY created_at;"

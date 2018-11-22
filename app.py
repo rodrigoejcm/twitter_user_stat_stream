@@ -7,9 +7,11 @@ from pony.orm import *
 import db_init
 import matplotlib.pyplot as plt
 import io
+import re
 import base64
-from data_vars import dict_paises, query_user
+from data_vars import dict_paises, query_user, word_list_filter,query_tweets_with_words
 
+pd.set_option('display.max_colwidth', -1)
 app = Flask(__name__)
 
 @app.route('/')
@@ -24,10 +26,21 @@ def index():
     user_stats = find_user_stats()
     #user_info = get_user_info()
     runtime = find_total_time()
-
+    
     
     graph = get_total_tweets_hour()
     #print(reply_tweets)
+
+    ## Key words
+    df = get_all_replies()
+    text = combine_rows(df)
+    text = clean_string(text)
+    resultado = count_words(text,word_list_filter)
+    tweets_word_list = get_tweets_with_wordlist()
+    
+    ##
+
+
     return render_template('index.html',
         last_tweet=last_tweet,
         user_stats = user_stats,
@@ -40,7 +53,9 @@ def index():
         graph = graph, 
         space = total_space/10 **9,
         used = used_space/10**9,
-        free = free_space/10**9 )
+        free = free_space/10**9,
+        resultado = resultado,
+        tweets_word_list = tweets_word_list)
 
 
 def find_last_tweets():
@@ -107,6 +122,41 @@ def get_total_tweets_hour():
         plt.close()
         return 'data:image/png;base64,{}'.format(graph_url)
 
+
+def get_all_replies():
+        query = 'SELECT text_full from tweet where tweet_type = "REPLY";'        
+        return pd.read_sql(query, db_init.db.get_connection())
+
+def combine_rows(df):
+        text = df['text_full'].str.cat()   
+        return text
+
+def clean_string(text):
+        return ' '.join(re.sub("([@#][A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)"," ",text).split())
+        
+
+def count_words(clean_text,word_list_filter):
+        resultado = {}
+        total_words = len(re.findall(r'\w+', clean_text))
+        id = 0    
+        for word in word_list_filter:
+                
+                count = 0
+                count = len(re.findall(word, clean_text))
+                if count != 0:
+                        resultado[id] = {"word":word,"count":count, "Relation_total_words": count/total_words}
+                        id += 1
+        #print(resultado)
+        return pd.DataFrame.from_dict(data=resultado, orient="index", columns=['word','count','Relation_total_words' ])
+
+
+def get_tweets_with_wordlist():
+        tdf = pd.read_sql(query_tweets_with_words, db_init.db.get_connection())
+        print(tdf.head())
+        tdf['link'] =  '''<a href="https://twitter.com/statuses/'''+ tdf.id.map(str) + '''">'''+tdf.id.map(str)+'''</a>'''
+        print( tdf['link'].head())
+        return tdf
+        
 
 if __name__ == '__main__':
     app.run(port=443, host='0.0.0.0')
