@@ -33,7 +33,7 @@ class Tweet(db.Entity):
     in_reply_to_user_id = Optional(int, size=64)
     in_reply_to_status_id = Optional(int, size=64)
     in_reply_to_screen_name = Optional(str, nullable=True)
-    total_words = Optional(int, size=64),
+    total_words = Optional(int, size=64)
     retweet_from_tweet_id = Optional(int, size=64)
     retweet_from_screen_name = Optional(str, nullable=True)
     retweet_from_user_id = Optional(int, size=64)
